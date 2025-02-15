@@ -50,7 +50,7 @@ d3.csv("baby_names.csv").then(data => {
                 const topNames = babyNamesData.get(stateAbbr) || [];
                 console.log(`top names`, topNames);
                 const namesText = topNames.map(n => `${n.name} (${n.count})`).join("<br>") || "No Data";
-                console.log(`3 top names`, namesText);
+                console.log(`top 3 names`, namesText);
                 tooltip.style("display", "block")
                     .html(`<strong>${d.properties.NAME} (${stateAbbr})</strong><br>
                            <strong>Top Baby Names:</strong><br>
