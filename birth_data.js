@@ -1,11 +1,13 @@
 const width = 960, height = 600;
 const svg = d3.select("svg");
 const tooltip = d3.select(".tooltip");
+const yearSlider = document.getElementById("yearSlider");
+const selectedYearLabel = document.getElementById("selectedYear");
+
+let stateDataByYear = new Map();
 
 d3.csv("birth_data.csv").then(data => {
     console.log("CSV Data Loaded:", data);
-
-    let stateDataByYear = new Map();
 
     // Aggregate stateBirths per year using STATEFP
     data.forEach(d => {
@@ -28,45 +30,62 @@ d3.csv("birth_data.csv").then(data => {
 
     console.log("Aggregated Birth Data by Year:", stateDataByYear);
 
-    // Load GeoJSON and visualize the first available year (e.g., 2006)
+    // Load GeoJSON
     d3.json("states.geojson").then(geoData => {
         console.log("GeoJSON Data Loaded:", geoData);
 
         const projection = d3.geoAlbersUsa().fitSize([width, height], geoData);
         const path = d3.geoPath().projection(projection);
 
-        let selectedYear = 2006; // Default year
-        let yearData = stateDataByYear.get(selectedYear) || new Map();
+        function updateMap(selectedYear) {
+            let yearData = stateDataByYear.get(selectedYear) || new Map();
 
-        // Set domain using actual state birth values
-        const birthValues = Array.from(yearData.values());
-        const colorScale = d3.scaleQuantile()
-            .domain(birthValues) // Use all state birth counts for the selected year
-            .range(d3.schemeRdYlGn[9]); // Uses 15 color shades from D3
+            // Define color scale
+            const birthValues = Array.from(yearData.values());
 
-        svg.selectAll(".state")
-            .data(geoData.features)
-            .join("path")
-            .attr("class", "state")
-            .attr("d", path)
-            .attr("fill", d => {
-                const stateFIPS = d.properties.STATEFP;
-                return yearData.has(stateFIPS) 
-                    ? colorScale(yearData.get(stateFIPS)) 
-                    : "#ccc"; // Gray for missing data
-            })            
-            .on("mouseover", (event, d) => {
-                const stateFIPS = d.properties.STATEFP;
-                const format = d3.format(",.0f"); // Format for commas with no decimals
-                const births = yearData.has(stateFIPS) 
-                    ? format(Math.round(yearData.get(stateFIPS) / 1000)) + "K" // Show in thousands
-                    : "No Data";
-                
-                tooltip.style("display", "block")
-                    .html(`<strong>${d.properties.NAME} (${d.properties.STUSPS})</strong><br>#Births: ${births}`)
-                    .style("left", `${event.pageX + 10}px`)
-                    .style("top", `${event.pageY + 10}px`);
-            })
-            .on("mouseout", () => tooltip.style("display", "none"));
+            const colorScale = d3.scaleQuantile()
+                .domain(birthValues)
+                .range(d3.schemeRdYlGn[9]); // 9 color buckets
+
+            // Update states
+            svg.selectAll(".state")
+                .data(geoData.features)
+                .join("path")
+                .attr("class", "state")
+                .attr("d", path)
+                .transition().duration(500) // Smooth transition
+                .attr("fill", d => {
+                    const stateFIPS = d.properties.STATEFP;
+                    return yearData.has(stateFIPS) 
+                        ? colorScale(yearData.get(stateFIPS)) 
+                        : "#ccc"; // Gray for missing data
+                });
+
+            // Update tooltip on hover
+            svg.selectAll(".state")
+                .on("mouseover", (event, d) => {
+                    const stateFIPS = d.properties.STATEFP;
+                    const format = d3.format(",.0f"); // Format for commas, no decimals
+                    const births = yearData.has(stateFIPS) 
+                        ? format(Math.round(yearData.get(stateFIPS) / 1000)) + "K"
+                        : "No Data";
+
+                    tooltip.style("display", "block")
+                        .html(`<strong>${d.properties.NAME} (${d.properties.STUSPS})</strong><br>#Births: ${births}`)
+                        .style("left", `${event.pageX + 10}px`)
+                        .style("top", `${event.pageY + 10}px`);
+                })
+                .on("mouseout", () => tooltip.style("display", "none"));
+        }
+
+        // Initialize map with default year (2006)
+        updateMap(2006);
+
+        // Update map when slider changes
+        yearSlider.addEventListener("input", function() {
+            const selectedYear = +this.value;
+            selectedYearLabel.textContent = selectedYear;
+            updateMap(selectedYear);
+        });
     });
 });

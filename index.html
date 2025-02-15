@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>US Demographics Heatmap</title>
+    <title>US Birth Data Visualization</title>
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
     <style>
@@ -19,12 +19,26 @@
             pointer-events: none;
             display: none;
         }
+        .slider-container {
+            margin: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .slider-label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
+    <div class="slider-container">
+        <span class="slider-label">Select Year:</span>
+        <input type="range" id="yearSlider" min="2006" max="2015" value="2006" step="1">
+        <span id="selectedYear">2006</span>
+    </div>
+
     <svg width="960" height="600"></svg>
     <div class="tooltip"></div>
-    <script src="birth_data.js"></script>
-    <script src="baby_names.js"></script>
+
+    <script src="home.js"></script>
 </body>
 </html>
