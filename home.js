@@ -1,6 +1,14 @@
+document.addEventListener("DOMContentLoaded", function () {
+    // Enable Bootstrap tooltips globally
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach(tooltipEl => {
+        new bootstrap.Tooltip(tooltipEl, { html: true });
+    });
+});
+
 const width = 960, height = 600;
 const svg = d3.select("svg");
-const tooltip = d3.select(".tooltip");
+const legendSvg = d3.select("#legend"); // Select the legend SVG
 const yearSlider = document.getElementById("yearSlider");
 const selectedYearLabel = document.getElementById("selectedYear");
 
@@ -31,6 +39,21 @@ d3.csv("birth_data.csv").then(data => {
     });
 
     console.log("Aggregated Birth Data by Year:", stateDataByYear);
+
+    // Calculate global min and max births across all years
+    let globalMinBirths = Infinity;
+    let globalMaxBirths = -Infinity;
+
+    stateDataByYear.forEach(yearData => {
+        const yearMin = d3.min(Array.from(yearData.values()));
+        const yearMax = d3.max(Array.from(yearData.values()));
+
+        if (yearMin < globalMinBirths) globalMinBirths = yearMin;
+        if (yearMax > globalMaxBirths) globalMaxBirths = yearMax;
+    });
+
+    console.log("Global Min Births:", globalMinBirths);
+    console.log("Global Max Births:", globalMaxBirths);
 
     // Load baby names data
     d3.csv("baby_names.csv").then(nameData => {
@@ -87,17 +110,75 @@ d3.csv("birth_data.csv").then(data => {
             const projection = d3.geoAlbersUsa().fitSize([width, height], geoData);
             const path = d3.geoPath().projection(projection);
 
+            // Add color scale for legend
+            const legendWidth = 500, legendHeight = 20; // Adjust for horizontal layout
+            const legend = legendSvg.selectAll(".legend").data([0]); // Append to the legend SVG
+            const legendEnter = legend.enter().append("g")
+                .attr("class", "legend")
+                .attr("transform", `translate(50, 20)`); // Position it within the legend SVG
+
+            // Define fixed color scale for all years
+            const colorScale = d3.scaleLog()
+                .domain([globalMinBirths, globalMaxBirths]) // Use global min and max
+                .range(["#ffffcc", "#006837"]); // Use a valid color range
+
+            // Create a gradient for the legend
+            const gradientId = "legend-gradient";
+            legendSvg.append("defs")
+                .append("linearGradient")
+                .attr("id", gradientId)
+                .attr("x1", "0%") // Gradient starts at the left
+                .attr("x2", "100%") // Gradient ends at the right
+                .attr("y1", "0%")
+                .attr("y2", "0%")
+                .selectAll("stop")
+                .data([
+                    { offset: "0%", color: "#ffffcc" }, // Start color
+                    { offset: "100%", color: "#006837" } // End color
+                ])
+                .enter().append("stop")
+                .attr("offset", d => d.offset)
+                .attr("stop-color", d => d.color);
+
+            // Create a single rectangle with gradient fill
+            legendEnter.append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", legendWidth)
+                .attr("height", legendHeight)
+                .attr("fill", `url(#${gradientId})`); // Apply the gradient
+
+            // Add "Low" and "High" labels
+            legendEnter.append("text")
+                .attr("x", 0) // Position "Low" at the left
+                .attr("y", -5) // Position above the rectangle
+                .style("text-anchor", "start")
+                .style("font-size", "12px")
+                .style("font-weight", "bold")
+                .text("Low");
+
+            legendEnter.append("text")
+                .attr("x", legendWidth) // Position "High" at the right
+                .attr("y", -5) // Position above the rectangle
+                .style("text-anchor", "end")
+                .style("font-size", "12px")
+                .style("font-weight", "bold")
+                .text("High");
+
+            // Add a label for the legend
+            legendEnter.append("text")
+                .attr("x", legendWidth / 2)
+                .attr("y", legendHeight + 20) // Position text below the rectangle
+                .style("text-anchor", "middle")
+                .style("font-size", "14px")
+                .style("font-weight", "bold")
+                .text("Birth Counts");
+
             function updateMap(selectedYear) {
                 let yearData = stateDataByYear.get(selectedYear) || new Map();
                 let namesData = babyNamesByYearAndState.get(selectedYear) || new Map();
 
-                // Define color scale
-                const birthValues = Array.from(yearData.values());
-                const colorScale = d3.scaleQuantile()
-                    .domain(birthValues)
-                    .range(d3.schemeRdYlGn[9]); // 9 color buckets
-
-                // Update states
+                // Update states with fixed color scale
                 svg.selectAll(".state")
                     .data(geoData.features)
                     .join("path")
@@ -107,13 +188,13 @@ d3.csv("birth_data.csv").then(data => {
                     .attr("fill", d => {
                         const stateFIPS = d.properties.STATEFP;
                         return yearData.has(stateFIPS) 
-                            ? colorScale(yearData.get(stateFIPS)) 
+                            ? colorScale(yearData.get(stateFIPS)) // Apply fixed color scale
                             : "#ccc"; // Gray for missing data
                     });
 
                 // Update tooltip on hover
                 svg.selectAll(".state")
-                    .on("mouseover", (event, d) => {
+                    .on("mouseover", function (event, d) {
                         const stateFIPS = d.properties.STATEFP;
                         const format = d3.format(",.0f"); // Format for commas, no decimals
                         const births = yearData.has(stateFIPS) 
@@ -125,12 +206,29 @@ d3.csv("birth_data.csv").then(data => {
                             ? namesData.get(stateFIPS).map(n => `${n.name}: ${n.count}`).join("<br>") 
                             : "No Data";
 
-                        tooltip.style("display", "block")
-                            .html(`<strong>${d.properties.NAME} (${d.properties.STUSPS})</strong><br>#Births: ${births}<br><strong>Top 3 Baby Names:</strong><br>${topNames}`)
-                            .style("left", `${event.pageX + 10}px`)
-                            .style("top", `${event.pageY + 10}px`);
+                        // Create formatted tooltip content
+                        const tooltipContent = `
+                            <strong class="custom-state-name">${d.properties.NAME} (${d.properties.STUSPS})</strong><br>
+                            #Births: ${births}<hr>
+                            <strong>Top 3 Baby Names:</strong><br>
+                            ${topNames}
+                        `;
+
+                        // Set Bootstrap tooltip attributes dynamically
+                        d3.select(this)
+                            .attr("data-bs-toggle", "tooltip")
+                            .attr("data-bs-html", "true") // Enable HTML rendering
+                            .attr("title", tooltipContent); // Use 'title' attribute for tooltip content
+
+                        // Manually trigger Bootstrap tooltip
+                        const tooltipInstance = new bootstrap.Tooltip(this, { html: true });
+                        tooltipInstance.show();
                     })
-                    .on("mouseout", () => tooltip.style("display", "none"));
+                    .on("mouseout", function () {
+                        // Hide and destroy tooltip on mouseout
+                        const tooltipInstance = bootstrap.Tooltip.getInstance(this);
+                        if (tooltipInstance) tooltipInstance.dispose();
+                    });
             }
 
             // Initialize map with default year (2006)
