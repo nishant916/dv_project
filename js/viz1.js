@@ -16,7 +16,7 @@ let stateDataByYear = new Map();
 let babyNamesByYearAndState = new Map();
 let stateAbbrToFips = new Map(); // Mapping of state abbreviation to FIPS code
 
-d3.csv("birth_data.csv").then(data => {
+d3.csv("../data/birth_data.csv").then(data => {
     console.log("CSV Data Loaded:", data);
 
     // Aggregate stateBirths per year using STATEFP
@@ -56,11 +56,11 @@ d3.csv("birth_data.csv").then(data => {
     console.log("Global Max Births:", globalMaxBirths);
 
     // Load baby names data
-    d3.csv("baby_names.csv").then(nameData => {
+    d3.csv("../data/baby_names.csv").then(nameData => {
         console.log("Baby Names Data Loaded:", nameData);
 
         // Load GeoJSON
-        d3.json("states.geojson").then(geoData => {
+        d3.json("../data/states.geojson").then(geoData => {
             console.log("GeoJSON Data Loaded:", geoData);
 
             // Create a mapping from state abbreviation to FIPS code

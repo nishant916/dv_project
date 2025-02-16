@@ -11,7 +11,7 @@ const svg = d3.select("svg")
 const tooltip = d3.select("#tooltip");
 
 // Load baby names data
-d3.csv("baby_names.csv").then(data => {
+d3.csv("../data/baby_names.csv").then(data => {
     console.log("Baby Names Data Loaded:", data);
 
     // Process baby names data: aggregate counts by name

@@ -1,5 +1,13 @@
-const width = 960, height = 600;
-const svg = d3.select("svg");
+const margin = { top: 30, right: 20, bottom: 20, left: 35 }; // Increased left margin further
+const width = 960 - margin.left - margin.right;
+const height = 600 - margin.top - margin.bottom;
+
+const svg = d3.select("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
 const tooltip = d3.select("#tooltip");
 const stateDropdown = d3.select("#stateDropdown");
 
@@ -7,12 +15,12 @@ let babyNamesDataByState = new Map(); // Map to hold data per state
 let geoJSONData; // To hold geoJSON data
 
 // Load geoJSON data
-d3.json("states.geojson").then(data => {
+d3.json("../data/states.geojson").then(data => {
     geoJSONData = data;
     console.log("GeoJSON Data Loaded:", geoJSONData);
 
     // Load baby names data
-    d3.csv("baby_names.csv").then(data => {
+    d3.csv("../data/baby_names.csv").then(data => {
         console.log("Baby Names Data Loaded:", data);
 
         // Prepare data: Group baby names by state and year
@@ -61,6 +69,7 @@ d3.json("states.geojson").then(data => {
 
                 // Set default gender to Male
                 document.querySelector('#maleRadio').checked = true;
+                document.body.className = "boy";
 
                 // Render the chart
                 const selectedGender = document.querySelector('input[name="gender"]:checked').value;
@@ -79,6 +88,12 @@ d3.json("states.geojson").then(data => {
                 const selectedState = stateDropdown.node().value;
                 if (selectedState) {
                     const selectedGender = this.value;
+                    if (selectedGender == 'F'){
+                        document.body.className = "girl";
+                    }
+                    else {
+                        document.body.className = "boy";
+                    }
                     renderLineChart(selectedState, selectedGender);
                 }
             });
@@ -150,13 +165,19 @@ function renderLineChart(selectedState, selectedGender) {
     svg.append("g")
         .attr("transform", `translate(0,${height - 50})`)
         .call(d3.axisBottom(xScale).tickFormat(d3.format("d")))
+        .selectAll("text")
+        .style("font-size", "14px")
+        .style("font-weight", "bold");
 
     // Add y-axis
     svg.append("g")
         .attr("transform", `translate(50, 0)`)
         .call(d3.axisLeft(yScale)
-        .tickSizeOuter(0) 
-    );
+        .tickSizeOuter(0))
+        .selectAll("text")
+        .style("font-size", "14px")
+        .style("font-weight", "bold");
+    
 
     // Add title
     svg.append("text")
@@ -172,7 +193,8 @@ function renderLineChart(selectedState, selectedGender) {
      .attr("x", width / 2)
      .attr("y", height - 10)
      .attr("text-anchor", "middle")
-     .style("font-size", "14px")
+     .style("font-size", "18px")
+     .style("font-weight", "bold")
      .text("Year");
 
     svg.append("text")
@@ -180,7 +202,8 @@ function renderLineChart(selectedState, selectedGender) {
      .attr("y", 10)
      .attr("x", -height / 2)
      .attr("text-anchor", "middle")
-     .style("font-size", "14px")
+     .style("font-size", "18px")
+     .style("font-weight", "bold")
      .text("Count of Baby Names");
 
 

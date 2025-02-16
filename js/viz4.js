@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const globalMinPercentage = 22; // Minimum percentage
     const globalMaxPercentage = 27; // Maximum percentage
 
-    d3.csv("birth_data.csv").then(data => {
+    d3.csv("../data/birth_data.csv").then(data => {
         console.log("CSV Data Loaded:", data);
 
         // Define season ranges
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Total Births by State:", totalBirthsByState);
 
         // Load GeoJSON
-        d3.json("states.geojson").then(geoData => {
+        d3.json("../data/states.geojson").then(geoData => {
             console.log("GeoJSON Data Loaded:", geoData);
 
             const projection = d3.geoAlbersUsa().fitSize([width, height], geoData);
@@ -156,9 +156,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             : "0.00";
 
                         const tooltipContent = `
-                            <strong>${d.properties.NAME}</strong><br>
+                            <strong class="custom-state-name">${d.properties.NAME}</strong><br>
                             Births for ${selectedSeason}: ${birthsForSeason.toLocaleString()}<br>
-                            Total Births (All Seasons): ${totalBirthsForState.toLocaleString()}<br>
                             Percentage: ${percentage}%
                         `;
 
