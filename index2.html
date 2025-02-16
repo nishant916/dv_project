@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 5 Baby Names State & Gender Wise (2006-2015)</title>
+
+    <!-- Bootstrap inclusion -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    
+ 
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        .state {
+            stroke: #fff;
+            stroke-width: 1px;
+        }
+        .text-center {
+            position: relative;
+        }
+        .tooltip-inner {
+            text-align: left !important;
+        }
+        .body {
+            font-family: Arial, sans-serif;
+        }
+        #tooltip {
+        position: absolute;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        display: none;
+        pointer-events: none;
+        font-weight: bold;
+        font-size: 12px;
+        }
+
+        /* Dynamic tooltip background */
+        .tooltip-inner {
+            font-size: 12px;
+            padding: 5px;
+            background-color: inherit !important;
+            border: 2px solid white;
+        }
+        .svg-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .input[type="text"] {
+            margin-bottom: 20px;
+            padding: 5px;
+            font-size: 14px;
+            width: 250px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark" aria-label="Navigation bar">
+        <div class="container-fluid">
+          <a id="homePage" class="navbar-brand" href="#">Home</a>
+  
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#classroomNavbar" aria-controls="classroomNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+  
+          <div class="collapse navbar-collapse" id="classroomNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              
+                <li class="nav-item">
+                    <a id="visualizationOne" class="nav-link active" href="#">Visualization #1</a>
+                </li>
+
+                <li class="nav-item">
+                    <a id="visualizationTwo" class="nav-link" href="#">Visualization #2</a>
+                </li>
+
+                <li class="nav-item">
+                    <a id="visualizationThree" class="nav-link" href="#">Visualization #3</a>
+                </li>
+  
+              
+                <li class="nav-item">
+                    <a id="aboutPage" class="nav-link" href="#">About</a>
+                </li>
+            </ul >    
+          </div>
+        </div>
+      </nav>
+
+    <h1 class="h1 text-center text-success mt-3 mb-3">Top 5 Baby Names State & Gender Wise By Year (2006-2015)</h1>
+    
+
+    <!-- Searchable dropdown for selecting state -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <label for="stateDropdown" class="form-label">Select State:</label>
+                <select id="stateDropdown" class="form-select">
+                    <option value="" selected disabled>Select State</option>
+                    <!-- States will be populated dynamically -->
+                </select>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Radio buttons for selecting gender -->
+    <div class="container mt-3">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <label class="form-label">Select Gender:</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="maleRadio" value="M" checked disabled>
+                    <label class="form-check-label" for="maleRadio">Male</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="gender" id="femaleRadio" value="F" disabled>
+                    <label class="form-check-label" for="femaleRadio">Female</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container for the line chart -->
+    <div class="svg-container">
+        <svg width="960" height="600"></svg>
+    </div>
+
+    <!-- Tooltip for displaying the name details -->
+    <div id="tooltip" class="bs-tooltip-end" role="tooltip">
+        <div class="tooltip-arrow"></div>
+        <div class="tooltip-inner"></div>
+    </div>
+
+    <!-- Link to JavaScript file -->
+    <script src="visual1.js"></script>
+</body>
+</html>
