@@ -1,12 +1,6 @@
-const margin = { top: 30, right: 20, bottom: 20, left: 35 }; // Increased left margin further
-const width = 960 - margin.left - margin.right;
-const height = 600 - margin.top - margin.bottom;
 
-const svg = d3.select("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", `translate(${margin.left}, ${margin.top})`);
+const width = 960, height = 600;
+const svg = d3.select("svg");
 
 const tooltip = d3.select("#tooltip");
 const stateDropdown = d3.select("#stateDropdown");
@@ -39,10 +33,12 @@ d3.json("../data/states.geojson").then(data => {
         });
 
         // Prepare the list of states with full names and abbreviations
-        const stateList = Array.from(babyNamesDataByState.keys()).map(abbr => {
+        const stateList = Array.from(babyNamesDataByState.keys())
+        .map(abbr => {
             const stateFullName = getStateFullName(abbr); // Function to get the full state name
             return { abbr, fullName: stateFullName };
-        });
+        })
+        .sort((a, b) => d3.ascending(a.fullName, b.fullName));
 
         // Populate state dropdown (select)
         const dropdownOptions = d3.select("#stateDropdown").selectAll("option")
@@ -153,7 +149,7 @@ function renderLineChart(selectedState, selectedGender) {
     // Define scales
     const xScale = d3.scaleLinear()
         .domain([2006, 2015])  
-        .range([50, width - 50]);
+        .range([80, width - 50]);
 
     const maxCount = d3.max(filteredData, d => d.count); // Find the maximum count
     const yScale = d3.scaleLinear()
@@ -171,7 +167,7 @@ function renderLineChart(selectedState, selectedGender) {
 
     // Add y-axis
     svg.append("g")
-        .attr("transform", `translate(50, 0)`)
+        .attr("transform", `translate(80, 0)`)
         .call(d3.axisLeft(yScale)
         .tickSizeOuter(0))
         .selectAll("text")
@@ -179,19 +175,10 @@ function renderLineChart(selectedState, selectedGender) {
         .style("font-weight", "bold");
     
 
-    // Add title
-    svg.append("text")
-        .attr("x", width / 2)
-        .attr("y", 20)
-        .attr("text-anchor", "middle")
-        .style("font-size", "16px")
-        .text(`Top 5 Baby Names in ${getStateFullName(selectedState)} (${selectedGender === "F" ? "Female" : "Male"}) (2006-2015)`);
-
-
     // **Added Axis Labels**
      svg.append("text")
-     .attr("x", width / 2)
-     .attr("y", height - 10)
+     .attr("x", width / 2 + 15)
+     .attr("y", height)
      .attr("text-anchor", "middle")
      .style("font-size", "18px")
      .style("font-weight", "bold")
@@ -199,7 +186,7 @@ function renderLineChart(selectedState, selectedGender) {
 
     svg.append("text")
      .attr("transform", "rotate(-90)")
-     .attr("y", 10)
+     .attr("y", 25)
      .attr("x", -height / 2)
      .attr("text-anchor", "middle")
      .style("font-size", "18px")

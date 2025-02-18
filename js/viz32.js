@@ -1,7 +1,6 @@
 
 const width = 960, height = 600;
 const svg = d3.select("svg");
-
 const tooltip = d3.select("#tooltip");
 
 // Load baby names data
@@ -35,7 +34,6 @@ d3.csv("../data/baby_names.csv").then(data => {
     const yScale = d3.scaleLinear()
         .domain([0, d3.max(top10Names, d => d.count)* 1.2])
         .range([height-50, 50]);
-
 
     // Add x-axis
     svg.append("g")
@@ -73,15 +71,24 @@ d3.csv("../data/baby_names.csv").then(data => {
         .style("font-weight", "bold")
         .text("Count");
 
+    const defs = svg.append("defs");
 
-    // Function to initialize Bootstrap tooltips
-    function initializeTooltips() {
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
-    }
-    // Create bars for the bar chart
-    const colorScale = d3.scaleOrdinal(d3.schemeCategory10); // You can choose any color scheme
+    const pattern = defs.append("pattern")
+        .attr("id", "stripePattern")
+        .attr("patternUnits", "userSpaceOnUse")
+        .attr("width", 30) // Adjust width of stripes
+        .attr("height", 30);
 
+    pattern.append("rect") 
+        .attr("width", 30)
+        .attr("height", 30)
+        .attr("fill", "#ffc107"); // Background color (Bootstrap warning yellow)
+
+    pattern.append("path")
+        .attr("d", "M 0,30 L 30,0") // Creates diagonal stripes
+        .attr("stroke", "black")
+        .attr("stroke-width", 1);
+   
     svg.selectAll(".bar")
         .data(top10Names)
         .enter().append("rect")
@@ -90,16 +97,16 @@ d3.csv("../data/baby_names.csv").then(data => {
         .attr("y", d => yScale(d.count))
         .attr("width", xScale.bandwidth())
         .attr("height", d => height - 50 - yScale(d.count)) // Height of the bar
-        .attr("fill", (d, i) => colorScale(i))
+        .attr("fill", "url(#stripePattern)") // Apply pattern
+        .attr("stroke", "black") // Optional: Add black outline
+        .attr("stroke-width", 1.5)
+
         .on("mouseover", function(event, d) {
-            const barColor = d3.select(this).attr("fill"); // Get the color from the bar
             tooltip.style("display", "block")
                 .html(`<strong>${d.name}:</strong> ${d.count}`)
                 .style("left", (xScale(d.name) + xScale.bandwidth() / 2) + "px")
                 .style("top", (yScale(d.count) - 40) + "px")
-                .style("background-color", barColor)  
-                .style("color", "white")               
-                .style("border", `2px solid ${barColor}`); 
+               
         })
         .on("mousemove", function(event) {
             tooltip.style("left", (event.pageX - 50) + "px")
@@ -108,8 +115,5 @@ d3.csv("../data/baby_names.csv").then(data => {
         .on("mouseout", function() {
             tooltip.style("display", "none");
         });
-
-    // Initialize Bootstrap tooltips
-    initializeTooltips();
 });
 

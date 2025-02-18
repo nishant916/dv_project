@@ -95,36 +95,34 @@
     <h1 class="h1 text-center text-primary mt-3 mb-3">Top 5 Baby Names State & Gender Wise By Year (2006-2015)</h1>
     
 
-    <!-- Searchable dropdown for selecting state -->
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <label for="stateDropdown" class="form-label">Select State:</label>
+
+    <!-- Container for dropdown and radio buttons in the same row -->
+    <div class="container mt-3">
+        <div class="row justify-content-center align-items-center text-center">
+            <!-- Dropdown for selecting state -->
+            <div class="col-md-4">
+                <label for="stateDropdown" class="form-label text-dark fw-bold fs-5">Select State</label>
                 <select id="stateDropdown" class="form-select">
                     <option value="" selected disabled>Select State</option>
                     <!-- States will be populated dynamically -->
                 </select>
             </div>
-        </div>
-    </div>
 
-
-    <!-- Radio buttons for selecting gender -->
-    <div class="container mt-3">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <label class="form-label">Select Gender:</label>
-                <div class="form-check">
+            <!-- Radio buttons for selecting gender -->
+            <div class="col-md-4">
+                <label class="form-label d-block text-dark fw-bold fs-5">Select Gender</label>
+                <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="gender" id="maleRadio" value="M" checked disabled>
-                    <label class="form-check-label" for="maleRadio">Male</label>
+                    <label class="form-check-label text-primary fw-bold" for="maleRadio">Male</label>
                 </div>
-                <div class="form-check">
+                <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="gender" id="femaleRadio" value="F" disabled>
-                    <label class="form-check-label" for="femaleRadio">Female</label>
+                    <label class="form-check-label text-danger fw-bold" for="femaleRadio">Female</label>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- Container for the line chart -->
     <div class="svg-container">
