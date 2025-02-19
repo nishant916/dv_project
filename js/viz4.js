@@ -150,6 +150,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     .on("mouseover", function (event, d) {
                         const stateFIPS = d.properties.STATEFP;
                         const birthsForSeason = seasonData.get(stateFIPS) || 0;
+                        const format = d3.format(",.0f");
+                        const avgBirthsForSeason = format(birthsForSeason / 10000) + "K"; // Dividing by 1000 (for K) * 10 (for years)
                         const totalBirthsForState = totalBirthsByState.get(stateFIPS) || 0;
                         const percentage = totalBirthsForState > 0 
                             ? ((birthsForSeason / totalBirthsForState) * 100).toFixed(2) 
@@ -157,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         const tooltipContent = `
                             <strong class="custom-state-name">${d.properties.NAME}</strong><br>
-                            Births for ${selectedSeason}: ${birthsForSeason.toLocaleString()}<br>
+                            Avg. #births in ${selectedSeason}: ${avgBirthsForSeason.toLocaleString()}<br>
                             Percentage: ${percentage}%
                         `;
 
