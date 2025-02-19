@@ -11,42 +11,172 @@
     
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <link href="css/common.css" rel="stylesheet">
     
 </head>
 <body>
     <!-- Navigation bar -->
     <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark" aria-label="Navigation bar">
-        <div class="container-fluid">
-          <a id="homePage" class="navbar-brand" href="index.html">Home</a>
-  
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#classroomNavbar" aria-controls="classroomNavbar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-  
-          <div class="collapse navbar-collapse" id="classroomNavbar">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              
-            <li class="nav-item">
-                <a id="visualizationOne" class="nav-link" href="viz1.html">Viz#1: Births & Baby Names</a>
-            </li>
+      <div class="container-fluid">
+        <a id="homePage" class="navbar-brand" href="index.html">Home</a>
 
-            <li class="nav-item">
-                <a id="visualizationTwo" class="nav-link" href="viz2.html">Viz#2: Baby Names by State</a>
-            </li>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#classroomNavbar" aria-controls="classroomNavbar" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <li class="nav-item">
-                <a id="visualizationThree" class="nav-link" href="viz3.html">Viz#3: Top Baby Names</a>
-            </li>
-          
-            <li class="nav-item">
-                <a id="visualizationFour" class="nav-link" href="viz4.html">Viz#4: Births Across Seasons</a>
-            </li>
-            </ul >    
+        <div class="collapse navbar-collapse" id="classroomNavbar">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            
+          <li class="nav-item">
+              <a id="visualizationOne" class="nav-link" href="viz1.html">Viz#1: Births & Baby Names</a>
+          </li>
+
+          <li class="nav-item">
+              <a id="visualizationTwo" class="nav-link" href="viz2.html">Viz#2: Baby Names by State</a>
+          </li>
+
+          <li class="nav-item">
+              <a id="visualizationThree" class="nav-link" href="viz3.html">Viz#3: Top Baby Names</a>
+          </li>
+        
+          <li class="nav-item">
+              <a id="visualizationFour" class="nav-link" href="viz4.html">Viz#4: Births Across Seasons</a>
+          </li>
+          </ul >    
+        </div>
+      </div>
+    </nav>
+
+    <div class="container px-4 py-5">
+      <h1 class="pb-2 border-bottom text-primary">About the Project</h1>
+
+      <div class="row row-cols-1 row-cols-md-2 align-items-md-center g-5 py-5">
+        <div class="col d-flex flex-column align-items-start gap-2">
+          <h2 class="fw-bold text-body-emphasis">This is the final project for the 'Data Visualization' module.</h2>
+          <p class="text-body-secondary">We have used two data-sets from Kaggle and combined them to create a visualization. 
+            Additionally, we have created other visualizations using these data-sets individually.</p>
+          <a href="#about-developers" class="btn btn-primary btn-lg">About the Developers</a>
+        </div>
+
+        <div class="col">
+          <div class="row row-cols-1 row-cols-sm-2 g-4">
+            <div class="col d-flex flex-column gap-2">
+              <div class="feature-icon-small d-inline-flex align-items-start fs-4">
+                <svg width="4em" height="2em">
+                  <image href="logos/Kaggle.svg" x="0" y="0" width="100%" height="100%" />
+                </svg>
+              </div>
+              <p class="text-body-secondary">Found two datasets on Kaggle and downloaded the csv files </p>
+            </div>
+
+            <div class="col d-flex flex-column gap-2">
+              <div class="feature-icon-small d-inline-flex align-items-start fs-4">
+                <svg width="2em" height="2em">
+                  <image href="logos/D3JS.svg" x="0" y="0" width="100%" height="100%" />
+                </svg>
+              </div>
+              <p class="text-body-secondary">Used d3.js to parse CSVs and create visualizations</p>
+            </div>
+
+            <div class="col d-flex flex-column gap-2">
+              <div class="feature-icon-small d-inline-flex align-items-start fs-4">
+                <svg width="2em" height="2em">
+                  <image href="logos/JS.svg" x="0" y="0" width="100%" height="100%" />
+                </svg>
+              </div>
+              <p class="text-body-secondary">Used only JavaScript (no other language) to process data into useable form</p>
+            </div>
+
+            <div class="col d-flex flex-column gap-2">
+              <div class="feature-icon-small d-inline-flex align-items-start fs-4">
+                <svg width="2.5em" height="2em">
+                  <image href="logos/Bootstrap.png" x="0" y="0" width="100%" height="100%" />
+                </svg>
+              </div>
+              <p class="text-body-secondary">Implemented consistent styling through Bootstrap framework</p>
+            </div>
           </div>
         </div>
-      </nav>
+      </div>
+    </div>
+    
+    <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel" style="max-height: 800px">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <svg class="bd-placeholder-img" width="100%" height="500px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#184E77"/></svg>
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Dataset #1: US Births by County and State (1985-2015)</h1>
+              <p>The dataset is available in CSV format and consists of 8 columns. Key columns include State, County, Month, Year, countyBirths, stateBirths </p>
+              <img class="mb-4" src="images/dataset1.png" alt="number of births dataset screenshot" style="max-width: 100%; height: auto;">
+              <p><a class="btn btn-lg btn-primary" href="https://www.kaggle.com/datasets/thedevastator/us-births-by-county-and-state">See on Kaggle</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <svg class="bd-placeholder-img" width="100%" height="500px" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="#184E77"/></svg>
+          <div class="container">
+            <div class="carousel-caption">
+              <h1>Dataset #2: Baby Names USA from 1910 to 2021 (SSA)</h1>
+              <p>The dataset is available in CSV format and consists of 5 columns: State (STUSPS), Sex (M/F), Year, Name (first name of the baby), Count (count of name)</p>
+              <img class="mb-4" src="images/dataset2.png" alt="baby names dataset screenshot" style="max-width: 100%; height: auto;">
+              <p><a class="btn btn-lg btn-primary" href="https://www.kaggle.com/datasets/donkea/ssa-names-1910-2021">See on Kaggle</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Buttons to move -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
 
-    <h1 class="h1 text-center text-secondary mt-3 mb-3">About the Project</h1>
+    <div id="about-developers" class="container px-4 py-5">
+      <h1 class="pb-2 border-bottom text-primary mb-5">About the Developers</h1>
+
+    <div class="row mb-2">
+      <div class="col-md-6">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+          <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-primary">Student</strong>
+            <h3 class="mb-0">Amrutha Manjunath</h3>
+            <div class="mb-auto text-body-secondary">3121132<br>B.Sc. Computer Science</div>
+            <a href="amrutha.manjunath@stud.srh-campus-berlin.de" class="text-primary"><i>amrutha.manjunath@stud.srh-campus-berlin.de</i></a>
+            <img class="mt-3" src="logos/srh-logo.png" style="max-width: 16%; height: auto;">
+          </div>
+          <div class="col-auto d-none d-lg-block">
+            <img src="images/Amrutha-placeholder.jpg" style="width: auto; height: 250px">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+          <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-primary">Student</strong>
+            <h3 class="mb-0">Nishant Malik</h3>
+            <div class="mb-auto text-body-secondary">3121385<br>B.Sc. Computer Science</div>
+            <a href="nishant.malik@stud.srh-campus-berlin.de" class="text-primary"><i>nishant.malik@stud.srh-campus-berlin.de</i></a>
+            <img class="mt-3" src="logos/srh-logo.png" style="max-width: 16%; height: auto;">
+          </div>
+          <div class="col-auto d-none d-lg-block">
+            <img src="images/Nishant.jpg" style="width: auto; height: 250px">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
 
     
 </body>
