@@ -67,17 +67,14 @@ function addAxes(xScale, yScale, top10Names) {
         .attr("transform", `translate(0,${height - 50})`)
         .call(d3.axisBottom(xScale).tickSize(0)) // Remove tick marks on x-axis
         .selectAll(".tick text")
-        .style("text-anchor", "middle")
-        .style("font-size", "14px")
-        .style("font-weight", "bold");
+        .style("text-anchor", "middle").style("font-size", "14px").style("font-weight", "bold");
 
     // Add y-axis
     svg.append("g")
         .attr("transform", `translate(80, 0)`)
         .call(d3.axisLeft(yScale).tickSizeOuter(0)) // Remove outer tick marks on y-axis
         .selectAll(".tick text")
-        .style("font-size", "14px")
-        .style("font-weight", "bold");
+        .style("font-size", "14px").style("font-weight", "bold");
 }
 
 // Function to add axis labels
@@ -86,18 +83,14 @@ function addAxisLabels() {
         .attr("x", width / 2)
         .attr("y", height - 5)
         .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .style("font-weight", "bold")
-        .text("Baby Names");
+        .style("font-size", "18px").style("font-weight", "bold").text("Baby Names");
 
     svg.append("text")
         .attr("transform", "rotate(-90)")
         .attr("y", 15)
         .attr("x", -height / 2)
         .attr("text-anchor", "middle")
-        .style("font-size", "18px")
-        .style("font-weight", "bold")
-        .text("Count");
+        .style("font-size", "18px").style("font-weight", "bold").text("Count");
 }
 
 // Function to draw the bar pattern
@@ -145,16 +138,13 @@ function drawBars(top10Names, xScale, yScale, pattern) {
 
 // Function to show tooltip
 function showTooltip(event, d) {
-    tooltip.style("display", "block")
-        .html(`<strong>${d.name}:</strong> ${d.count}`)
-        .style("left", (event.pageX + 10) + "px")
-        .style("top", (event.pageY - 30) + "px");
+    tooltip.style("display", "block").html(`<strong>${d.name}:</strong> ${d.count}`);
+    moveTooltip(event);
 }
 
 // Function to move tooltip with mouse
 function moveTooltip(event) {
-    tooltip.style("left", (event.pageX - 50) + "px")
-        .style("top", (event.pageY - 50) + "px");
+    tooltip.style("left", (event.pageX - 50) + "px").style("top", (event.pageY - 50) + "px");
 }
 
 // Function to hide tooltip

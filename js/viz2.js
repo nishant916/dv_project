@@ -52,6 +52,12 @@ function populateStateDropdown() {
         .text(d => `${d.fullName} (${d.abbr})`);
 }
 
+// Get full state name from abbreviation using geoJSON
+function getStateFullName(abbr) {
+    const state = geoJSONData.features.find(feature => feature.properties.STUSPS === abbr);
+    return state ? state.properties.NAME : null;
+}
+
 // Set up event listeners for dropdown and gender selection
 function setupEventListeners() {
     document.querySelectorAll('input[name="gender"]').forEach(radio => radio.disabled = true);
@@ -82,12 +88,6 @@ function handleGenderChange() {
         document.body.className = selectedGender === 'F' ? "girl" : "boy";
         renderLineChart(selectedState, selectedGender);
     }
-}
-
-// Get full state name from abbreviation using geoJSON
-function getStateFullName(abbr) {
-    const state = geoJSONData.features.find(feature => feature.properties.STUSPS === abbr);
-    return state ? state.properties.NAME : null;
 }
 
 // Render the line chart
@@ -122,7 +122,7 @@ function drawAxes(xScale, yScale) {
     svg.append("text").attr("transform", "rotate(-90)").attr("y", 25).attr("x", -height / 2).attr("text-anchor", "middle").style("font-size", "18px").style("font-weight", "bold").text("Count of Baby Names");
 }
 
-// Draw line chart with tooltips
+// Draw line chart
 function drawLines(top5Names, groupedData, xScale, yScale) {
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -157,8 +157,8 @@ function drawDataPoints(lineData, color, xScale, yScale) {
 function showTooltip(event, d) {
     const color = d3.select(event.target).style("fill"); // Get the color of the data point
     tooltip.style("display", "block").html(`<strong>${d.name}:</strong> ${d.count}`)
-        .style("left", (event.pageX + 10) + "px").style("top", (event.pageY - 30) + "px")
         .style("background-color", color);
+    moveTooltip(event);
 }
 
 // Move tooltip
