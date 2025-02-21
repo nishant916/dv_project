@@ -34,13 +34,13 @@ function initializeDropdown() {
 
 // Loading Birth Data CSV and GeoJSON files using Promise.all (concurrent loading)
 function loadData() {
-        Promise.all([
-            d3.csv("../data/birth_data.csv"),
-            d3.json("../data/states.geojson")
-        ]).then(([csvData, geoData]) => {
-            processBirthData(csvData);
-            initializeVisualization(geoData);
-        });
+    Promise.all([
+        d3.csv("../data/birth_data.csv"),
+        d3.json("../data/states.geojson")
+    ]).then(([csvData, geoData]) => {
+        processBirthData(csvData);
+        initializeVisualization(geoData);
+    });
 }
 
 // Aggregating births per season for each state
@@ -81,6 +81,7 @@ function initializeVisualization(geoData) {
 }
 
 function setupLegend() {
+    const legendWidth = 660, legendHeight = 20;
     const gradientId = "legend-gradient";
     legendSvg.append("defs")
         .append("linearGradient")
@@ -92,10 +93,10 @@ function setupLegend() {
         .attr("offset", d => d.offset)
         .attr("stop-color", d => d.color);
     
-    legendSvg.append("rect").attr("x", 50).attr("y", 20).attr("width", 500).attr("height", 20).attr("fill", `url(#${gradientId})`);
-    legendSvg.append("text").attr("x", 50).attr("y", 15).style("text-anchor","start").style("font-size","14px").style("font-weight","bold").text(`${globalMinPercentage}%`);
-    legendSvg.append("text").attr("x", 550).attr("y", 15).style("text-anchor","end").style("font-size","14px").style("font-weight","bold").text(`${globalMaxPercentage}%`);
-    legendSvg.append("text").attr("x", 300).attr("y", 60).style("text-anchor","middle").style("font-size","16px").style("font-weight","bold").text("Percentage of Births in a season");
+    legendSvg.append("rect").attr("x", 0).attr("y", 20).attr("width", legendWidth).attr("height", legendHeight).attr("fill", `url(#${gradientId})`);
+    legendSvg.append("text").attr("x", 0).attr("y", 15).style("text-anchor","start").style("font-size","14px").style("font-weight","bold").text(`${globalMinPercentage}%`);
+    legendSvg.append("text").attr("x", legendWidth).attr("y", 15).style("text-anchor","end").style("font-size","14px").style("font-weight","bold").text(`${globalMaxPercentage}%`);
+    legendSvg.append("text").attr("x", legendWidth/2).attr("y", legendHeight + 40).style("text-anchor","middle").style("font-size","16px").style("font-weight","bold").text("Percentage of Births in a season");
 }
 
 // Update map & toolip when a season is selected
