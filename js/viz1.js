@@ -97,7 +97,7 @@ function processNameData(data, geoData) {
 
 // Defining the legend
 function createLegend() {
-    const legendWidth = 500, legendHeight = 20;
+    const legendWidth = 660, legendHeight = 20;
     const gradientId = "legend-gradient";
 
     legendSvg.append("defs")
@@ -114,7 +114,7 @@ function createLegend() {
         .attr("stop-color", d => d.color);
 
     // Position it within the legend SVG
-    const legend = legendSvg.append("g").attr("class", "legend").attr("transform", "translate(50, 20)");
+    const legend = legendSvg.append("g").attr("class", "legend").attr("transform", "translate(0, 20)");
     
     // Create a single rectangle with gradient fill
     legend.append("rect").attr("width", legendWidth).attr("height", legendHeight).attr("fill", `url(#${gradientId})`);
